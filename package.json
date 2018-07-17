@@ -1,9 +1,12 @@
 {
   "name": "@teamawesome/transform",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Function composition",
   "keywords": [
-    "composition"
+    "composition",
+    "compose",
+    "hooks",
+    "ordered"
   ],
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +14,7 @@
     "dev": "babel src --out-dir dist --watch --source-maps inline",
     "lint": "eslint src/",
     "test": "mocha",
-    "prepublishOnly": "npm run-script lint && npm run-script test && npm run-script build"
+    "prepublishOnly": "npm run-script test && npm run-script build"
   },
   "author": "Tom Hooijenga <tomhooijenga@gmail.com>",
   "homepage": "https://github.com/tomhooijenga/transform",

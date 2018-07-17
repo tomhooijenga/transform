@@ -9,50 +9,69 @@ it('constructor should return function', () => {
 });
 
 it('constructor object', () => {
-  sinon.spy(Pipe.prototype, 'add');
+  sinon.spy(Pipe.prototype, 'set');
 
   const p = new Pipe({
     a: () => {},
     b: () => {},
   });
 
-  p.add.should.be.calledTwice();
+  p.set.should.be.calledTwice();
   p.order.should.deepEqual(['a', 'b']);
 
-  Pipe.prototype.add.restore();
+  Pipe.prototype.set.restore();
 });
 
 it('constructor func', () => {
-  sinon.spy(Pipe.prototype, 'add');
+  sinon.spy(Pipe.prototype, 'set');
 
   const p = new Pipe((() => {}));
 
-  p.add.should.be.calledOnce();
+  p.set.should.be.calledOnce();
   p.order.should.deepEqual(['main']);
 
-  Pipe.prototype.add.restore();
+  Pipe.prototype.set.restore();
 });
 
-it('add', () => {
+it('set', () => {
   const p = new Pipe();
   const func = () => {};
 
-  p.add('a', func);
-  p.add('b', func);
+  p.set('a', func);
+  p.set('b', func);
 
-  p.order.should.deepEqual(['b', 'a']);
-  p.actions.should.be.size(2);
+  p.order.should.deepEqual(['a', 'b']);
+  p.should.be.size(2);
 });
 
-it('add after', () => {
+it('set existing', () => {
+    const p = new Pipe();
+    const func = () => {};
+
+    p.set('a', func);
+    p.set('b', func);
+    p.set('a', func);
+
+    p.order.should.deepEqual(['a', 'b', 'a']);
+    p.should.be.size(2);
+});
+
+it('insert', () => {
   const func = () => {};
   const p = new Pipe(func);
 
-  p.add('after', func, 'main');
-  p.order.should.deepEqual(['main', 'after']);
+  p.insert('after', func, 'main');
+  p.insert('before', func, 'main', false);
+  p.order.should.deepEqual(['before', 'main', 'after']);
+
+});
+
+it('insert non-existent', () => {
+  const func = () => {};
+  const p = new Pipe(func);
 
   should(() => {
-    p.add('after', func, 'doesnotexist');
+    p.insert('after', func, 'doesnotexist');
   }).throw();
 });
 
