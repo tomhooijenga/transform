@@ -90,6 +90,20 @@ it('call', () => {
   inc.should.be.called(3);
 });
 
+it('call async', () => {
+  const inc = sinon.spy(val => val + 1);
+  const incAsync = sinon.spy(val => Promise.resolve(val + 1));
+  const p = new Pipe({
+    a: inc,
+    b: incAsync,
+    c: inc,
+  });
+
+  return p.call(1)
+    .should.be.finally.equal(4)
+    .and.should.be.Promise();
+});
+
 it('should be ordered', () => {
   const func = () => {};
   const func2 = () => {};
