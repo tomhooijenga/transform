@@ -8,34 +8,34 @@ export default class Pipe extends Map {
    * @param {Function|Iterable|Object} wrapped
    * @return {Function}
    */
-  constructor (wrapped = {}) {
-    super()
+  constructor(wrapped = {}) {
+    super();
 
-    let entries
+    let entries;
     if (wrapped[Symbol.iterator]) {
-      entries = [...wrapped.entries()]
+      entries = [...wrapped.entries()];
     } else if (typeof wrapped === 'object') {
-      entries = Object.entries(wrapped)
+      entries = Object.entries(wrapped);
     } else if (typeof wrapped === 'function') {
-      entries = [['main', wrapped]]
+      entries = [['main', wrapped]];
     }
 
-    entries.forEach(([key, value]) => this.set(key, value))
+    entries.forEach(([key, value]) => this.set(key, value));
   }
 
   /**
    * @param args
    */
-  call (args) {
+  call(args) {
     return this.order.reduce((value, action) => {
       if (value instanceof Promise) {
         return value.then(
           resolvedValue => this.get(action)(resolvedValue),
-        )
+        );
       }
 
-      return this.get(action)(value)
-    }, args)
+      return this.get(action)(value);
+    }, args);
   }
 
   /**
@@ -45,10 +45,10 @@ export default class Pipe extends Map {
    * @param {Function} value The function to call
    * @return {Pipe}
    */
-  set (key, value) {
-    this.order.push(key)
+  set(key, value) {
+    this.order.push(key);
 
-    return super.set(key, value)
+    return super.set(key, value);
   }
 
   /**
@@ -61,16 +61,16 @@ export default class Pipe extends Map {
    *                        insert before
    * @return {Pipe}
    */
-  insert (key, value, neighbour, after = true) {
+  insert(key, value, neighbour, after = true) {
     if (!this.has(neighbour)) {
-      throw new Error(`No such neighbour key [${neighbour}]`)
+      throw new Error(`No such neighbour key [${neighbour}]`);
     }
 
-    const offset = after ? 1 : 0
-    const index = this.order.indexOf(neighbour)
+    const offset = after ? 1 : 0;
+    const index = this.order.indexOf(neighbour);
 
-    this.order.splice(index + offset, 0, key)
-    return super.set(key, value)
+    this.order.splice(index + offset, 0, key);
+    return super.set(key, value);
   }
 
   /**
@@ -79,18 +79,70 @@ export default class Pipe extends Map {
    * @param {string|*} key
    * @return {boolean}
    */
-  delete (key) {
-    this.order.filter(entry => entry !== key)
+  delete(key) {
+    this.order.filter(entry => entry !== key);
 
-    return super.delete(key)
+    return super.delete(key);
   }
 
   /**
    * Clear the stack
    */
-  clear () {
-    this.order.length = 0
+  clear() {
+    this.order.length = 0;
 
-    return super.clear()
+    return super.clear();
+  }
+
+
+  /**
+   * @inheritDoc
+   */
+  forEach(callbackfn, thisArg) {
+    for (let i = 0; i < this.order.length; i += 1) {
+      const key = this.order[i];
+
+      callbackfn.call(thisArg, key, this.get(key));
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  * [Symbol.iterator]() {
+    for (let i = 0; i < this.order.length; i += 1) {
+      const key = this.order[i];
+
+      yield [key, this.get(key)];
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  * entries() {
+    for (let i = 0; i < this.order.length; i += 1) {
+      const key = this.order[i];
+
+      yield [key, this.get(key)];
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  * keys() {
+    for (let i = 0; i < this.order.length; i += 1) {
+      yield this.order[i];
+    }
+  }
+
+  /**
+   * @inheritDoc
+   */
+  * values() {
+    for (let i = 0; i < this.order.length; i += 1) {
+      yield this.get(this.order[i]);
+    }
   }
 }

@@ -89,3 +89,22 @@ it('call', () => {
   inc.args[2][0].should.equal(3);
   inc.should.be.called(3);
 });
+
+it('should be ordered', () => {
+  const func = () => {};
+  const func2 = () => {};
+  const keys = ['one', 'two', 'three'];
+  const values = [func, func2, func];
+  const entries = keys.map((key, i) => [key, values[i]]);
+  const p = new Pipe({
+    one: func,
+    three: func,
+  });
+  p.insert('two', func2, 'one');
+
+  [...p.keys()].should.deepEqual(keys);
+  [...p.values()].should.deepEqual(values);
+  [...p.entries()].should.deepEqual(entries);
+  [...p].should.deepEqual(entries);
+  [...p[Symbol.iterator]()].should.deepEqual(entries);
+});
