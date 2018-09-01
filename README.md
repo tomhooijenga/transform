@@ -12,7 +12,7 @@ p.add('fn1', () => { });
 // Insert a function after another
 p.insert('afterfn1', () => {}, 'fn1', true);
 // Insert a function before another
-p.insert('beforefn1', () => {}, 'fn1', true);
+p.insert('beforefn1', () => {}, 'fn1', false);
 
 const value = p.call();
 ```
@@ -31,7 +31,9 @@ new Pipe(function () {
 new Pipe(new Map(...));
 ```
 # Methods
-Pipe inherits from Map. Any function on Map will work on Pipe.
+Pipe inherits from Map. Any function on Map will work on Pipe. All iteration methods iterate in the order that executing
+it would. 
+
 Additionally, there are the following methods:
 * `insert(key, function, neighbour, after = true)`
 * `call(args)` Will call the stack top to bottom, transforming args with each call. If one of the functions returns a
