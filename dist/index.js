@@ -84,22 +84,25 @@ function (_Map) {
   }
   /**
    * @param args
+   * @param thisArg
    */
 
 
   (0, _createClass2.default)(Pipe, [{
     key: "call",
-    value: function call(args) {
+    value: function call(args, thisArg) {
       var _this2 = this;
 
       return this.order.reduce(function (value, action) {
+        var func = _this2.get(action);
+
         if (value instanceof _promise.default) {
           return value.then(function (resolvedValue) {
-            return _this2.get(action)(resolvedValue);
+            return func.call(thisArg, resolvedValue);
           });
         }
 
-        return _this2.get(action)(value);
+        return func.call(thisArg, value);
       }, args);
     }
     /**

@@ -25,16 +25,19 @@ export default class Pipe extends Map {
 
   /**
    * @param args
+   * @param thisArg
    */
-  call(args) {
+  call(args, thisArg) {
     return this.order.reduce((value, action) => {
+      const func = this.get(action);
+
       if (value instanceof Promise) {
         return value.then(
-          resolvedValue => this.get(action)(resolvedValue),
+          resolvedValue => func.call(thisArg, resolvedValue)
         );
       }
 
-      return this.get(action)(value);
+      return func.call(thisArg, value);
     }, args);
   }
 

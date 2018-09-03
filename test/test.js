@@ -104,6 +104,21 @@ it('call async', () => {
     .and.should.be.Promise();
 });
 
+it('call thisArg', () => {
+  function inc (amount) {
+    this.value += amount;
+    return this.value;
+  }
+  const p = new Pipe({
+    a: inc,
+    b: inc,
+  });
+
+  return p.call(1, {
+    value: 0
+  }).should.equal(2);
+});
+
 it('should be ordered', () => {
   const func = () => {};
   const func2 = () => {};
