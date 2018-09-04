@@ -47,12 +47,14 @@ it('set', () => {
 it('set existing', () => {
     const p = new Pipe();
     const func = () => {};
+    const func2 = () => {};
 
     p.set('a', func);
     p.set('b', func);
-    p.set('a', func);
+    p.set('a', func2);
 
-    p.order.should.deepEqual(['a', 'b', 'a']);
+    p.order.should.deepEqual(['a', 'b']);
+    p.get('a').should.equal(func2);
     p.should.be.size(2);
 });
 

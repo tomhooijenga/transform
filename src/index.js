@@ -49,7 +49,9 @@ export default class Pipe extends Map {
    * @return {Pipe}
    */
   set(key, value) {
-    this.order.push(key);
+    if (!this.has(key)) {
+      this.order.push(key);
+    }
 
     return super.set(key, value);
   }

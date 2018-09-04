@@ -116,7 +116,10 @@ function (_Map) {
   }, {
     key: "set",
     value: function set(key, value) {
-      this.order.push(key);
+      if (!this.has(key)) {
+        this.order.push(key);
+      }
+
       return (0, _get2.default)((0, _getPrototypeOf2.default)(Pipe.prototype), "set", this).call(this, key, value);
     }
     /**
