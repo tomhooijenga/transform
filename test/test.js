@@ -93,8 +93,8 @@ it('call', () => {
 });
 
 it('call async', () => {
-  const inc = sinon.spy(val => val + 1);
-  const incAsync = sinon.spy(val => Promise.resolve(val + 1));
+  const inc = val => val + 1;
+  const incAsync = val => Promise.resolve(val + 1);
   const p = new Pipe({
     a: inc,
     b: incAsync,
@@ -104,6 +104,24 @@ it('call async', () => {
   return p.call(1)
     .should.be.finally.equal(4)
     .and.should.be.Promise();
+});
+
+it('call async custom promise', () => {
+  const inc = val => val + 1;
+  const incAsync = val => ({
+    then(resolve, reject) {
+      return resolve(val + 1);
+    }
+  });
+  const p = new Pipe({
+    a: inc,
+    b: incAsync,
+    c: inc,
+  });
+
+  return p.call(1)
+  .should.be.finally.equal(4)
+  .and.should.have.property('then')
 });
 
 it('call thisArg', () => {

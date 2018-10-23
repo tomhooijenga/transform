@@ -96,8 +96,8 @@ function (_Map) {
       return this.order.reduce(function (value, action) {
         var func = _this2.get(action);
 
-        if (value instanceof _promise.default) {
-          return value.then(function (resolvedValue) {
+        if (value !== null && value !== undefined && typeof value.then === 'function') {
+          return _promise.default.resolve(value).then(function (resolvedValue) {
             return func.call(thisArg, resolvedValue);
           });
         }

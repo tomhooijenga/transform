@@ -31,8 +31,8 @@ export default class Pipe extends Map {
     return this.order.reduce((value, action) => {
       const func = this.get(action);
 
-      if (value instanceof Promise) {
-        return value.then(
+      if (value !== null && value !== undefined && typeof value.then === 'function') {
+        return Promise.resolve(value).then(
           resolvedValue => func.call(thisArg, resolvedValue)
         );
       }
