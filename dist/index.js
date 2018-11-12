@@ -7,21 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _map = _interopRequireDefault(require("@babel/runtime/core-js/map"));
-
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _promise = _interopRequireDefault(require("@babel/runtime/core-js/promise"));
-
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
-
-var _entries = _interopRequireDefault(require("@babel/runtime/core-js/object/entries"));
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
-
-var _iterator = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -41,7 +33,7 @@ var _wrapNativeSuper2 = _interopRequireDefault(require("@babel/runtime/helpers/w
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
-var _Symbol$iterator = _iterator.default;
+var _Symbol$iterator = Symbol.iterator;
 
 var Pipe =
 /*#__PURE__*/
@@ -65,10 +57,10 @@ function (_Map) {
     (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "order", []);
     var entries;
 
-    if (wrapped[_iterator.default]) {
+    if (wrapped[Symbol.iterator]) {
       entries = (0, _toConsumableArray2.default)(wrapped.entries());
     } else if ((0, _typeof2.default)(wrapped) === 'object') {
-      entries = (0, _entries.default)(wrapped);
+      entries = Object.entries(wrapped);
     } else if (typeof wrapped === 'function') {
       entries = [['main', wrapped]];
     }
@@ -97,7 +89,7 @@ function (_Map) {
         var func = _this2.get(action);
 
         if (value !== null && value !== undefined && typeof value.then === 'function') {
-          return _promise.default.resolve(value).then(function (resolvedValue) {
+          return Promise.resolve(value).then(function (resolvedValue) {
             return func.call(thisArg, resolvedValue);
           });
         }
@@ -336,6 +328,6 @@ function (_Map) {
     })
   }]);
   return Pipe;
-}((0, _wrapNativeSuper2.default)(_map.default));
+}((0, _wrapNativeSuper2.default)(Map));
 
 exports.default = Pipe;
