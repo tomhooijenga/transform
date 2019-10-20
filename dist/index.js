@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -21,24 +21,26 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
 
+var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
+
 var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
 
 var _get2 = _interopRequireDefault(require("@babel/runtime/helpers/get"));
 
 var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
 
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
-
 var _wrapNativeSuper2 = _interopRequireDefault(require("@babel/runtime/helpers/wrapNativeSuper"));
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
-var _Symbol$iterator = Symbol.iterator;
+var _Symbol$iterator;
+
+_Symbol$iterator = Symbol.iterator;
 
 var Pipe =
 /*#__PURE__*/
 function (_Map) {
-  (0, _inherits2.default)(Pipe, _Map);
+  (0, _inherits2["default"])(Pipe, _Map);
 
   /**
    * @type {*[]}
@@ -52,21 +54,21 @@ function (_Map) {
     var _this;
 
     var wrapped = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    (0, _classCallCheck2.default)(this, Pipe);
-    _this = (0, _possibleConstructorReturn2.default)(this, (0, _getPrototypeOf2.default)(Pipe).call(this));
-    (0, _defineProperty2.default)((0, _assertThisInitialized2.default)((0, _assertThisInitialized2.default)(_this)), "order", []);
+    (0, _classCallCheck2["default"])(this, Pipe);
+    _this = (0, _possibleConstructorReturn2["default"])(this, (0, _getPrototypeOf2["default"])(Pipe).call(this));
+    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "order", []);
     var entries;
 
     if (wrapped[Symbol.iterator]) {
-      entries = (0, _toConsumableArray2.default)(wrapped.entries());
-    } else if ((0, _typeof2.default)(wrapped) === 'object') {
+      entries = (0, _toConsumableArray2["default"])(wrapped.entries());
+    } else if ((0, _typeof2["default"])(wrapped) === 'object') {
       entries = Object.entries(wrapped);
     } else if (typeof wrapped === 'function') {
       entries = [['main', wrapped]];
     }
 
     entries.forEach(function (_ref) {
-      var _ref2 = (0, _slicedToArray2.default)(_ref, 2),
+      var _ref2 = (0, _slicedToArray2["default"])(_ref, 2),
           key = _ref2[0],
           value = _ref2[1];
 
@@ -80,7 +82,7 @@ function (_Map) {
    */
 
 
-  (0, _createClass2.default)(Pipe, [{
+  (0, _createClass2["default"])(Pipe, [{
     key: "call",
     value: function call(args, thisArg) {
       var _this2 = this;
@@ -112,7 +114,7 @@ function (_Map) {
         this.order.push(key);
       }
 
-      return (0, _get2.default)((0, _getPrototypeOf2.default)(Pipe.prototype), "set", this).call(this, key, value);
+      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "set", this).call(this, key, value);
     }
     /**
      * Insert a function in the stack
@@ -137,7 +139,7 @@ function (_Map) {
       var offset = after ? 1 : 0;
       var index = this.order.indexOf(neighbour);
       this.order.splice(index + offset, 0, key);
-      return (0, _get2.default)((0, _getPrototypeOf2.default)(Pipe.prototype), "set", this).call(this, key, value);
+      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "set", this).call(this, key, value);
     }
     /**
      * Remove a function from the stack
@@ -152,7 +154,7 @@ function (_Map) {
       this.order.filter(function (entry) {
         return entry !== key;
       });
-      return (0, _get2.default)((0, _getPrototypeOf2.default)(Pipe.prototype), "delete", this).call(this, key);
+      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "delete", this).call(this, key);
     }
     /**
      * Clear the stack
@@ -162,7 +164,7 @@ function (_Map) {
     key: "clear",
     value: function clear() {
       this.order.length = 0;
-      return (0, _get2.default)((0, _getPrototypeOf2.default)(Pipe.prototype), "clear", this).call(this);
+      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "clear", this).call(this);
     }
     /**
      * @inheritDoc
@@ -184,9 +186,9 @@ function (_Map) {
     key: _Symbol$iterator,
     value:
     /*#__PURE__*/
-    _regenerator.default.mark(function value() {
+    _regenerator["default"].mark(function value() {
       var i, key;
-      return _regenerator.default.wrap(function value$(_context) {
+      return _regenerator["default"].wrap(function value$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
@@ -222,9 +224,9 @@ function (_Map) {
     key: "entries",
     value:
     /*#__PURE__*/
-    _regenerator.default.mark(function entries() {
+    _regenerator["default"].mark(function entries() {
       var i, key;
-      return _regenerator.default.wrap(function entries$(_context2) {
+      return _regenerator["default"].wrap(function entries$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
@@ -260,9 +262,9 @@ function (_Map) {
     key: "keys",
     value:
     /*#__PURE__*/
-    _regenerator.default.mark(function keys() {
+    _regenerator["default"].mark(function keys() {
       var i;
-      return _regenerator.default.wrap(function keys$(_context3) {
+      return _regenerator["default"].wrap(function keys$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
@@ -297,9 +299,9 @@ function (_Map) {
     key: "values",
     value:
     /*#__PURE__*/
-    _regenerator.default.mark(function values() {
+    _regenerator["default"].mark(function values() {
       var i;
-      return _regenerator.default.wrap(function values$(_context4) {
+      return _regenerator["default"].wrap(function values$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
@@ -328,6 +330,6 @@ function (_Map) {
     })
   }]);
   return Pipe;
-}((0, _wrapNativeSuper2.default)(Map));
+}((0, _wrapNativeSuper2["default"])(Map));
 
-exports.default = Pipe;
+exports["default"] = Pipe;
