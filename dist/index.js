@@ -144,6 +144,34 @@ function (_Map) {
       return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "set", this).call(this, key, value);
     }
     /**
+     * Insert a function before another
+     *
+     * @param {string|*} key The name of the hook
+     * @param {Function} value The function to call
+     * @param {string|*} neighbour The neighbour to insert before
+     * @return {Pipe}
+     */
+
+  }, {
+    key: "before",
+    value: function before(key, value, neighbour) {
+      return this.insert(key, value, neighbour, false);
+    }
+    /**
+     * Insert a function after another
+     *
+     * @param {string|*} key The name of the hook
+     * @param {Function} value The function to call
+     * @param {string|*} neighbour The neighbour to insert after
+     * @return {Pipe}
+     */
+
+  }, {
+    key: "after",
+    value: function after(key, value, neighbour) {
+      return this.insert(key, value, neighbour, true);
+    }
+    /**
      * Remove a function from the stack
      *
      * @param {string|*} key

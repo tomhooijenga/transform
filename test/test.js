@@ -65,7 +65,22 @@ it('insert', () => {
   p.insert('after', func, 'main');
   p.insert('before', func, 'main', false);
   p.order.should.deepEqual(['before', 'main', 'after']);
+});
 
+it('before', () => {
+  const func = () => {};
+  const p = new Pipe(func);
+
+  p.before('before', func, 'main');
+  p.order.should.deepEqual(['before', 'main']);
+});
+
+it('after', () => {
+  const func = () => {};
+  const p = new Pipe(func);
+
+  p.after('after', func, 'main');
+  p.order.should.deepEqual(['main', 'after']);
 });
 
 it('insert non-existent', () => {

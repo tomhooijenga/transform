@@ -1,4 +1,4 @@
-import {isPromise} from "./util";
+import { isPromise } from './util';
 
 export default class Pipe extends Map {
   /**
@@ -78,6 +78,30 @@ export default class Pipe extends Map {
 
     this.order.splice(index + offset, 0, key);
     return super.set(key, value);
+  }
+
+  /**
+   * Insert a function before another
+   *
+   * @param {string|*} key The name of the hook
+   * @param {Function} value The function to call
+   * @param {string|*} neighbour The neighbour to insert before
+   * @return {Pipe}
+   */
+  before(key, value, neighbour) {
+    return this.insert(key, value, neighbour, false);
+  }
+
+  /**
+   * Insert a function after another
+   *
+   * @param {string|*} key The name of the hook
+   * @param {Function} value The function to call
+   * @param {string|*} neighbour The neighbour to insert after
+   * @return {Pipe}
+   */
+  after(key, value, neighbour) {
+    return this.insert(key, value, neighbour, true);
   }
 
   /**
