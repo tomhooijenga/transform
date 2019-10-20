@@ -45,17 +45,17 @@ it('set', () => {
 });
 
 it('set existing', () => {
-    const p = new Pipe();
-    const func = () => {};
-    const func2 = () => {};
+  const p = new Pipe();
+  const func = () => {};
+  const func2 = () => {};
 
-    p.set('a', func);
-    p.set('b', func);
-    p.set('a', func2);
+  p.set('a', func);
+  p.set('b', func);
+  p.set('a', func2);
 
-    p.order.should.deepEqual(['a', 'b']);
-    p.get('a').should.equal(func2);
-    p.should.be.size(2);
+  p.order.should.deepEqual(['a', 'b']);
+  p.get('a').should.equal(func2);
+  p.should.be.size(2);
 });
 
 it('insert', () => {
@@ -111,7 +111,7 @@ it('call async custom promise', () => {
   const incAsync = val => ({
     then(resolve, reject) {
       return resolve(val + 1);
-    }
+    },
   });
   const p = new Pipe({
     a: inc,
@@ -120,12 +120,12 @@ it('call async custom promise', () => {
   });
 
   return p.call(1)
-  .should.be.finally.equal(4)
-  .and.should.have.property('then')
+    .should.be.finally.equal(4)
+    .and.should.have.property('then');
 });
 
 it('call thisArg', () => {
-  function inc (amount) {
+  function inc(amount) {
     this.value += amount;
     return this.value;
   }
@@ -135,7 +135,7 @@ it('call thisArg', () => {
   });
 
   return p.call(1, {
-    value: 0
+    value: 0,
   }).should.equal(2);
 });
 
