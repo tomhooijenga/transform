@@ -1,8 +1,10 @@
+import {isPromise} from "./util";
+
 export default class Pipe extends Map {
   /**
    * @type {*[]}
    */
-  order = []
+  order = [];
 
   /**
    * @param {Function|Iterable|Object} wrapped
@@ -31,9 +33,9 @@ export default class Pipe extends Map {
     return this.order.reduce((value, action) => {
       const func = this.get(action);
 
-      if (value !== null && value !== undefined && typeof value.then === 'function') {
+      if (isPromise(value)) {
         return Promise.resolve(value).then(
-          resolvedValue => func.call(thisArg, resolvedValue)
+          resolvedValue => func.call(thisArg, resolvedValue),
         );
       }
 

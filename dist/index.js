@@ -33,6 +33,8 @@ var _wrapNativeSuper2 = _interopRequireDefault(require("@babel/runtime/helpers/w
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var _util = require("./util");
+
 var _Symbol$iterator;
 
 _Symbol$iterator = Symbol.iterator;
@@ -90,7 +92,7 @@ function (_Map) {
       return this.order.reduce(function (value, action) {
         var func = _this2.get(action);
 
-        if (value !== null && value !== undefined && typeof value.then === 'function') {
+        if ((0, _util.isPromise)(value)) {
           return Promise.resolve(value).then(function (resolvedValue) {
             return func.call(thisArg, resolvedValue);
           });
