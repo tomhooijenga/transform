@@ -3,7 +3,7 @@ const sinon = require('sinon');
 require('should-sinon');
 const Pipe = require('../dist').default;
 
-it('constructor should return function', () => {
+it('constructor', () => {
   const p = new Pipe();
   p.should.be.instanceOf(Pipe);
 });
@@ -89,7 +89,9 @@ it('insert non-existent', () => {
 
   should(() => {
     p.insert('after', func, 'doesnotexist');
-  }).throw();
+  }).throw({
+    message: /^No such neighbour key/,
+  });
 });
 
 it('call', () => {
@@ -124,7 +126,7 @@ it('call async', () => {
 it('call async custom promise', () => {
   const inc = val => val + 1;
   const incAsync = val => ({
-    then(resolve, reject) {
+    then(resolve) {
       return resolve(val + 1);
     },
   });
@@ -135,7 +137,7 @@ it('call async custom promise', () => {
   });
 
   return p.call(1)
-    .should.be.finally.equal(4)
+    .should.finally.equal(4)
     .and.should.have.property('then');
 });
 
