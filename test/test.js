@@ -95,7 +95,7 @@ it('insert non-existent', () => {
 });
 
 it('transform', () => {
-  const inc = sinon.spy(val => val + 1);
+  const inc = sinon.spy((val) => val + 1);
   const p = new Pipe({
     a: inc,
     b: inc,
@@ -110,8 +110,8 @@ it('transform', () => {
 });
 
 it('transform async', () => {
-  const inc = val => val + 1;
-  const incAsync = val => Promise.resolve(val + 1);
+  const inc = (val) => val + 1;
+  const incAsync = (val) => Promise.resolve(val + 1);
   const p = new Pipe({
     a: inc,
     b: incAsync,
@@ -124,8 +124,8 @@ it('transform async', () => {
 });
 
 it('transform async custom promise', () => {
-  const inc = val => val + 1;
-  const incAsync = val => ({
+  const inc = (val) => val + 1;
+  const incAsync = (val) => ({
     then(resolve) {
       return resolve(val + 1);
     },
@@ -173,4 +173,79 @@ it('should be ordered', () => {
   [...p.entries()].should.deepEqual(entries);
   [...p].should.deepEqual(entries);
   [...p[Symbol.iterator]()].should.deepEqual(entries);
+});
+
+it('delete', () => {
+  const p = new Pipe({
+    a: () => {},
+    c: () => {},
+  });
+
+  p.has('a').should.be.true();
+  p.delete('a').should.be.true();
+  p.has('a').should.be.false();
+  p.order.should.not.containEql('a');
+});
+
+it('clear', () => {
+  const p = new Pipe({
+    a: () => {},
+    c: () => {},
+  });
+
+  should(p.clear()).be.undefined();
+  p.order.should.have.size(0);
+  p.hooks.should.have.size(0);
+});
+
+it('forEach', () => {
+  const callback = sinon.spy();
+  const a = () => {};
+  const b = () => {};
+  const p = new Pipe({
+    a,
+    b,
+  });
+
+  p.forEach(callback);
+
+  callback.should.be.calledTwice();
+  callback.firstCall.should.be.calledWithExactly('a', a, p);
+  callback.secondCall.should.be.calledWithExactly('b', b, p);
+});
+
+it('foreach thisArg', () => {
+  const callback = sinon.spy();
+  const a = () => {};
+  const b = () => {};
+  const thisArg = {};
+  const p = new Pipe({
+    a,
+    b,
+  });
+
+  p.forEach(callback, thisArg);
+
+  callback.should.be.calledTwice();
+  callback.firstCall.should.be.calledWithExactly('a', a, p);
+  callback.firstCall.thisValue.should.equal(thisArg);
+
+  callback.secondCall.should.be.calledWithExactly('b', b, p);
+  callback.secondCall.thisValue.should.equal(thisArg);
+});
+
+it('size', () => {
+  const p = new Pipe();
+
+  p.size.should.equal(0);
+  p.set('a', () => {});
+  p.size.should.equal(1);
+  p.set('a', () => {});
+  p.size.should.equal(1);
+  p.set('b', () => {});
+  p.size.should.equal(2);
+  p.delete('a');
+  p.size.should.equal(1);
+  p.clear();
+  p.size.should.equal(0);
 });

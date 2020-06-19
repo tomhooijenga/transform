@@ -189,20 +189,21 @@ var Pipe = /*#__PURE__*/function () {
     /**
      * Remove a function from the stack.
      *
-     * @param {string|*} key
+     * @param {string|*} key The name of the hook
      * @return {boolean}
      */
 
   }, {
     key: "delete",
     value: function _delete(key) {
-      this.order.filter(function (entry) {
+      this.order = this.order.filter(function (entry) {
         return entry !== key;
       });
       return this.hooks["delete"](key);
     }
     /**
      * Clear the stack.
+     * @return {undefined}
      */
 
   }, {
@@ -368,6 +369,17 @@ var Pipe = /*#__PURE__*/function () {
         }
       }, values, this);
     })
+    /**
+     * Get the amount of entries.
+     *
+     * @return {Number}
+     */
+
+  }, {
+    key: "size",
+    get: function get() {
+      return this.hooks.size;
+    }
   }]);
   return Pipe;
 }();

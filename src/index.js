@@ -140,12 +140,13 @@ export default class Pipe {
    * @return {boolean}
    */
   delete(key) {
-    this.order.filter((entry) => entry !== key);
+    this.order = this.order.filter((entry) => entry !== key);
     return this.hooks.delete(key);
   }
 
   /**
    * Clear the stack.
+   * @return {undefined}
    */
   clear() {
     this.order.length = 0;
@@ -204,5 +205,14 @@ export default class Pipe {
     for (let i = 0; i < this.order.length; i += 1) {
       yield this.get(this.order[i]);
     }
+  }
+
+  /**
+   * Get the amount of entries.
+   *
+   * @return {Number}
+   */
+  get size() {
+    return this.hooks.size;
   }
 }
