@@ -95,7 +95,7 @@ export default class Pipe {
    *                        insert before
    * @return {Pipe}
    */
-  insert(key, value, neighbour, after = true) {
+  insert(neighbour, key, value = key, after = true) {
     if (!this.has(neighbour)) {
       throw new Error(`No such neighbour key [${neighbour}]`);
     }
@@ -112,25 +112,24 @@ export default class Pipe {
   /**
    * Insert a function before another.
    *
+   * @param {string|*} neighbour The neighbour to insert before
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
-   * @param {string|*} neighbour The neighbour to insert before
    * @return {Pipe}
    */
-  before(key, value, neighbour) {
-    return this.insert(key, value, neighbour, false);
+  before(neighbour, key, value) {
+    return this.insert(neighbour, key, value, false);
   }
 
   /**
    * Insert a function after another.
-   *
+   * @param {string|*} neighbour The neighbour to insert after
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
-   * @param {string|*} neighbour The neighbour to insert after
    * @return {Pipe}
    */
-  after(key, value, neighbour) {
-    return this.insert(key, value, neighbour, true);
+  after(neighbour, key, value) {
+    return this.insert(neighbour, key, value, true);
   }
 
   /**

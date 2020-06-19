@@ -10,9 +10,9 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "tsc",
     "dev": "babel src --out-dir dist --watch --source-maps inline",
-    "lint": "eslint src/",
+    "lint": "tslint --project tsconfig.json",
     "test": "mocha",
     "prepublishOnly": "npm run-script test && npm run-script build"
   },
@@ -33,7 +33,9 @@
     "mocha": "^8.0.1",
     "should": "^13.2.3",
     "should-sinon": "0.0.6",
-    "sinon": "^9.0.2"
+    "sinon": "^9.0.2",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.2"

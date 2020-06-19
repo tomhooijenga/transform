@@ -1,14 +1,5 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = isPromise;
-
-var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
-
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Check if given value is a then-able.
  *
@@ -16,5 +7,6 @@ var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
  * @return {boolean}
  */
 function isPromise(obj) {
-  return !!obj && ((0, _typeof2["default"])(obj) === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
 }
+exports.default = isPromise;
