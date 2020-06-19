@@ -1,35 +1,40 @@
 import isPromise from './util';
 
-export default class Pipe extends Map {
+export default class Pipe {
   /**
    * @type {*[]}
+   * @private
    */
   order = [];
 
   /**
-   * @param {Function|Iterable|Object} wrapped
+   * @type {Map<any, any>}
+   * @private
+   */
+  hooks = new Map();
+
+  /**
+   * @param {Function|Iterable|Object} entries
    * @return {Function}
    */
-  constructor(wrapped = {}) {
-    super();
-
-    let entries;
-    if (wrapped[Symbol.iterator]) {
-      entries = [...wrapped.entries()];
-    } else if (typeof wrapped === 'object') {
-      entries = Object.entries(wrapped);
-    } else if (typeof wrapped === 'function') {
-      entries = [['main', wrapped]];
+  constructor(entries = {}) {
+    let pairs;
+    if (typeof entries.entries === 'function') {
+      pairs = [...entries.entries()];
+    } else if (typeof entries === 'object') {
+      pairs = Object.entries(entries);
+    } else if (typeof entries === 'function') {
+      pairs = [['main', entries]];
     }
 
-    entries.forEach(([key, value]) => this.set(key, value));
+    pairs.forEach(([key, value]) => this.set(key, value));
   }
 
   /**
    * @param args
    * @param thisArg
    */
-  call(args, thisArg) {
+  transform(args, thisArg) {
     return this.order.reduce((value, action) => {
       const func = this.get(action);
 
@@ -44,7 +49,27 @@ export default class Pipe extends Map {
   }
 
   /**
-   * Push a function on the stack
+   * Check if a hook is registered.
+   *
+   * @param {*} key The name of the hook
+   * @return {boolean}
+   */
+  has(key) {
+    return this.hooks.has(key);
+  }
+
+  /**
+   * Get the registered hook or undefined.
+   *
+   * @param {*} key The name of the hook
+   * @return {boolean}
+   */
+  get(key) {
+    return this.hooks.get(key);
+  }
+
+  /**
+   * Push a function on the stack or overwrite an existing one.
    *
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
@@ -55,11 +80,13 @@ export default class Pipe extends Map {
       this.order.push(key);
     }
 
-    return super.set(key, value);
+    this.hooks.set(key, value);
+
+    return this;
   }
 
   /**
-   * Insert a function in the stack
+   * Insert a function in the stack.
    *
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
@@ -77,11 +104,13 @@ export default class Pipe extends Map {
     const index = this.order.indexOf(neighbour);
 
     this.order.splice(index + offset, 0, key);
-    return super.set(key, value);
+    this.hooks.set(key, value);
+
+    return this;
   }
 
   /**
-   * Insert a function before another
+   * Insert a function before another.
    *
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
@@ -93,7 +122,7 @@ export default class Pipe extends Map {
   }
 
   /**
-   * Insert a function after another
+   * Insert a function after another.
    *
    * @param {string|*} key The name of the hook
    * @param {Function} value The function to call
@@ -105,34 +134,35 @@ export default class Pipe extends Map {
   }
 
   /**
-   * Remove a function from the stack
+   * Remove a function from the stack.
    *
-   * @param {string|*} key
+   * @param {string|*} key The name of the hook
    * @return {boolean}
    */
   delete(key) {
     this.order.filter((entry) => entry !== key);
-
-    return super.delete(key);
+    return this.hooks.delete(key);
   }
 
   /**
-   * Clear the stack
+   * Clear the stack.
    */
   clear() {
     this.order.length = 0;
-
-    return super.clear();
+    this.hooks.clear();
   }
 
   /**
-   * @inheritDoc
+   * Execute the given callback once for each entry.
+   *
+   * @param {Function} callback
+   * @param {*} thisArg
    */
-  forEach(callbackfn, thisArg) {
+  forEach(callback, thisArg) {
     for (let i = 0; i < this.order.length; i += 1) {
       const key = this.order[i];
 
-      callbackfn.call(thisArg, key, this.get(key));
+      callback.call(thisArg, key, this.get(key), this);
     }
   }
 

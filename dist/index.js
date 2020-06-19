@@ -19,68 +19,53 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-var _assertThisInitialized2 = _interopRequireDefault(require("@babel/runtime/helpers/assertThisInitialized"));
-
-var _get2 = _interopRequireDefault(require("@babel/runtime/helpers/get"));
-
-var _inherits2 = _interopRequireDefault(require("@babel/runtime/helpers/inherits"));
-
-var _possibleConstructorReturn2 = _interopRequireDefault(require("@babel/runtime/helpers/possibleConstructorReturn"));
-
-var _getPrototypeOf2 = _interopRequireDefault(require("@babel/runtime/helpers/getPrototypeOf"));
-
-var _wrapNativeSuper2 = _interopRequireDefault(require("@babel/runtime/helpers/wrapNativeSuper"));
-
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _util = _interopRequireDefault(require("./util"));
 
 var _Symbol$iterator;
 
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
 _Symbol$iterator = Symbol.iterator;
 
-var Pipe = /*#__PURE__*/function (_Map) {
-  (0, _inherits2["default"])(Pipe, _Map);
-
-  var _super = _createSuper(Pipe);
-
+var Pipe = /*#__PURE__*/function () {
   /**
    * @type {*[]}
+   * @private
    */
 
   /**
-   * @param {Function|Iterable|Object} wrapped
+   * @type {Map<any, any>}
+   * @private
+   */
+
+  /**
+   * @param {Function|Iterable|Object} entries
    * @return {Function}
    */
   function Pipe() {
-    var _this;
+    var _this = this;
 
-    var wrapped = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     (0, _classCallCheck2["default"])(this, Pipe);
-    _this = _super.call(this);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "order", []);
-    var entries;
+    (0, _defineProperty2["default"])(this, "order", []);
+    (0, _defineProperty2["default"])(this, "hooks", new Map());
+    var pairs;
 
-    if (wrapped[Symbol.iterator]) {
-      entries = (0, _toConsumableArray2["default"])(wrapped.entries());
-    } else if ((0, _typeof2["default"])(wrapped) === 'object') {
-      entries = Object.entries(wrapped);
-    } else if (typeof wrapped === 'function') {
-      entries = [['main', wrapped]];
+    if (typeof entries.entries === 'function') {
+      pairs = (0, _toConsumableArray2["default"])(entries.entries());
+    } else if ((0, _typeof2["default"])(entries) === 'object') {
+      pairs = Object.entries(entries);
+    } else if (typeof entries === 'function') {
+      pairs = [['main', entries]];
     }
 
-    entries.forEach(function (_ref) {
+    pairs.forEach(function (_ref) {
       var _ref2 = (0, _slicedToArray2["default"])(_ref, 2),
           key = _ref2[0],
           value = _ref2[1];
 
       return _this.set(key, value);
     });
-    return _this;
   }
   /**
    * @param args
@@ -89,8 +74,8 @@ var Pipe = /*#__PURE__*/function (_Map) {
 
 
   (0, _createClass2["default"])(Pipe, [{
-    key: "call",
-    value: function call(args, thisArg) {
+    key: "transform",
+    value: function transform(args, thisArg) {
       var _this2 = this;
 
       return this.order.reduce(function (value, action) {
@@ -106,7 +91,31 @@ var Pipe = /*#__PURE__*/function (_Map) {
       }, args);
     }
     /**
-     * Push a function on the stack
+     * Check if a hook is registered.
+     *
+     * @param {*} key The name of the hook
+     * @return {boolean}
+     */
+
+  }, {
+    key: "has",
+    value: function has(key) {
+      return this.hooks.has(key);
+    }
+    /**
+     * Get the registered hook or undefined.
+     *
+     * @param {*} key The name of the hook
+     * @return {boolean}
+     */
+
+  }, {
+    key: "get",
+    value: function get(key) {
+      return this.hooks.get(key);
+    }
+    /**
+     * Push a function on the stack or overwrite an existing one.
      *
      * @param {string|*} key The name of the hook
      * @param {Function} value The function to call
@@ -120,10 +129,11 @@ var Pipe = /*#__PURE__*/function (_Map) {
         this.order.push(key);
       }
 
-      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "set", this).call(this, key, value);
+      this.hooks.set(key, value);
+      return this;
     }
     /**
-     * Insert a function in the stack
+     * Insert a function in the stack.
      *
      * @param {string|*} key The name of the hook
      * @param {Function} value The function to call
@@ -145,10 +155,11 @@ var Pipe = /*#__PURE__*/function (_Map) {
       var offset = after ? 1 : 0;
       var index = this.order.indexOf(neighbour);
       this.order.splice(index + offset, 0, key);
-      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "set", this).call(this, key, value);
+      this.hooks.set(key, value);
+      return this;
     }
     /**
-     * Insert a function before another
+     * Insert a function before another.
      *
      * @param {string|*} key The name of the hook
      * @param {Function} value The function to call
@@ -162,7 +173,7 @@ var Pipe = /*#__PURE__*/function (_Map) {
       return this.insert(key, value, neighbour, false);
     }
     /**
-     * Insert a function after another
+     * Insert a function after another.
      *
      * @param {string|*} key The name of the hook
      * @param {Function} value The function to call
@@ -176,7 +187,7 @@ var Pipe = /*#__PURE__*/function (_Map) {
       return this.insert(key, value, neighbour, true);
     }
     /**
-     * Remove a function from the stack
+     * Remove a function from the stack.
      *
      * @param {string|*} key
      * @return {boolean}
@@ -188,28 +199,31 @@ var Pipe = /*#__PURE__*/function (_Map) {
       this.order.filter(function (entry) {
         return entry !== key;
       });
-      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "delete", this).call(this, key);
+      return this.hooks["delete"](key);
     }
     /**
-     * Clear the stack
+     * Clear the stack.
      */
 
   }, {
     key: "clear",
     value: function clear() {
       this.order.length = 0;
-      return (0, _get2["default"])((0, _getPrototypeOf2["default"])(Pipe.prototype), "clear", this).call(this);
+      this.hooks.clear();
     }
     /**
-     * @inheritDoc
+     * Execute the given callback once for each entry.
+     *
+     * @param {Function} callback
+     * @param {*} thisArg
      */
 
   }, {
     key: "forEach",
-    value: function forEach(callbackfn, thisArg) {
+    value: function forEach(callback, thisArg) {
       for (var i = 0; i < this.order.length; i += 1) {
         var key = this.order[i];
-        callbackfn.call(thisArg, key, this.get(key));
+        callback.call(thisArg, key, this.get(key), this);
       }
     }
     /**
@@ -356,6 +370,6 @@ var Pipe = /*#__PURE__*/function (_Map) {
     })
   }]);
   return Pipe;
-}( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(Map));
+}();
 
 exports["default"] = Pipe;

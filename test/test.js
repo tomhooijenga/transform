@@ -94,7 +94,7 @@ it('insert non-existent', () => {
   });
 });
 
-it('call', () => {
+it('transform', () => {
   const inc = sinon.spy(val => val + 1);
   const p = new Pipe({
     a: inc,
@@ -102,14 +102,14 @@ it('call', () => {
     c: inc,
   });
 
-  p.call(1).should.equal(4);
+  p.transform(1).should.equal(4);
   inc.args[0][0].should.equal(1);
   inc.args[1][0].should.equal(2);
   inc.args[2][0].should.equal(3);
   inc.should.be.called(3);
 });
 
-it('call async', () => {
+it('transform async', () => {
   const inc = val => val + 1;
   const incAsync = val => Promise.resolve(val + 1);
   const p = new Pipe({
@@ -118,12 +118,12 @@ it('call async', () => {
     c: inc,
   });
 
-  return p.call(1)
+  return p.transform(1)
     .should.be.finally.equal(4)
     .and.should.be.Promise();
 });
 
-it('call async custom promise', () => {
+it('transform async custom promise', () => {
   const inc = val => val + 1;
   const incAsync = val => ({
     then(resolve) {
@@ -136,12 +136,12 @@ it('call async custom promise', () => {
     c: inc,
   });
 
-  return p.call(1)
+  return p.transform(1)
     .should.finally.equal(4)
     .and.should.have.property('then');
 });
 
-it('call thisArg', () => {
+it('transform thisArg', () => {
   function inc(amount) {
     this.value += amount;
     return this.value;
@@ -151,7 +151,7 @@ it('call thisArg', () => {
     b: inc,
   });
 
-  return p.call(1, {
+  return p.transform(1, {
     value: 0,
   }).should.equal(2);
 });
