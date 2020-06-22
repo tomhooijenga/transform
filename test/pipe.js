@@ -118,16 +118,22 @@ it('transform', () => {
 
 it('transform async', async () => {
   const inc = (val) => val + 1;
-  const incAsync = sinon.spy((val) => Promise.resolve(val + 1));
+  const incAsync = sinon.spy(function incAsync(val){
+    return Promise.resolve(val + 1)
+  });
   const p = new Pipe({
     a: incAsync,
     b: incAsync,
     c: inc,
   });
 
-  await p.transform(1)
-      .should.be.finally.equal(4)
-    .and.should.be.Promise();
+  await p.transform(1).should.finally.equal(4);
+  incAsync.firstCall.should.be.calledWith(1);
+  incAsync.firstCall.returnValue.should.finally.equal(2);
+
+  incAsync.secondCall.should.be.calledWith(2);
+  incAsync.secondCall.returnValue.should.finally.equal(3);
+
   incAsync.callCount.should.equal(2);
 });
 
@@ -167,7 +173,7 @@ it('transform HookArgs', () => {
   inc.callCount.should.equal(3);
 })
 
-it('transform async HookArgs', () => {
+it('transform async HookArgs', async () => {
   const incAsync = sinon.spy((val, second, third) => {
     return Promise.resolve(new HookArgs(val + 1, second, third))
   });
@@ -175,18 +181,12 @@ it('transform async HookArgs', () => {
   const p = new Pipe({
     a: incAsync,
     b: incAsync,
-    c: incAsync,
   });
 
-  const promise = p.transform(1, 'second', 'third');
-
-  promise.should.finally.deepEqual([4, 'second', 'third']);
+  await p.transform(1, 'second', 'third').should.finally.deepEqual([3, 'second', 'third']);
   incAsync.firstCall.should.be.calledWith(1, 'second', 'third');
-  // incAsync.secondCall.should.be.calledWith(2, 'second', 'third');
-  // incAsync.thirdCall.should.be.calledWith(3, 'second', 'third');
-  // incAsync.callCount.should.equal(3);
-
-  return promise;
+  incAsync.secondCall.should.be.calledWith(2, 'second', 'third');
+  incAsync.callCount.should.equal(2);
 })
 
 it('should be ordered', () => {
