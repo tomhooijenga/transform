@@ -16,7 +16,7 @@ class Pipe {
             addEntries = Object.entries(entries);
         }
         else if (typeof entries === 'function') {
-            addEntries = [['main', entries]];
+            addEntries = [[entries, entries]];
         }
         addEntries.forEach(([key, value]) => this.set(key, value));
     }
@@ -161,5 +161,3 @@ class Pipe {
 }
 exports.default = Pipe;
 exports.Pipe = Pipe;
-const p = new Pipe();
-p.transform(new hook_args_1.HookArgs());

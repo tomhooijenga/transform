@@ -25,10 +25,11 @@ it('constructor object', () => {
 it('constructor func', () => {
   sinon.spy(Pipe.prototype, 'set');
 
+  const func = () => {};
   const p = new Pipe((() => {}));
 
   p.set.should.be.calledOnce();
-  p.order.should.deepEqual(['main']);
+  p.order.should.deepEqual([func]);
 
   Pipe.prototype.set.restore();
 });
@@ -59,33 +60,36 @@ it('set existing', () => {
 });
 
 it('insert', () => {
+  const main = () => {};
   const after = () => {};
   const before = () => {};
-  const p = new Pipe(() => {});
+  const p = new Pipe(main);
 
-  p.insert('main', 'after', after, );
+  p.insert(main, 'after', after, );
   p.insert('after', after);
-  p.insert('main', 'before', before, false);
+  p.insert(main, 'before', before, false);
   p.insert('before', before, undefined, false);
-  p.order.should.deepEqual([before, 'before', 'main', 'after', after]);
+  p.order.should.deepEqual([before, 'before', main, 'after', after]);
 });
 
 it('before', () => {
+  const main = () => {};
   const func = () => {};
-  const p = new Pipe(func);
+  const p = new Pipe(main);
 
-  p.before('main', 'before', func);
+  p.before(main, 'before', func);
   p.before('before', func);
-  p.order.should.deepEqual([func, 'before', 'main']);
+  p.order.should.deepEqual([func, 'before', main]);
 });
 
 it('after', () => {
+  const main = () => {};
   const func = () => {};
-  const p = new Pipe(func);
+  const p = new Pipe(main);
 
-  p.after('main', 'after', func);
+  p.after(main, 'after', func);
   p.after('after', func);
-  p.order.should.deepEqual(['main', 'after', func]);
+  p.order.should.deepEqual([main, 'after', func]);
 });
 
 it('insert non-existent', () => {
@@ -93,7 +97,7 @@ it('insert non-existent', () => {
   const p = new Pipe(func);
 
   should(() => {
-    p.insert('after', func, 'doesnotexist');
+    p.insert('doesnotexists', 'after', func);
   }).throw({
     message: /^No such neighbour key/,
   });

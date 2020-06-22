@@ -21,7 +21,7 @@ export default class Pipe implements Iterable<[any, Hook]> {
         } else if (typeof entries === 'object') {
             addEntries = Object.entries(entries);
         } else if (typeof entries === 'function') {
-            addEntries = [['main', entries]];
+            addEntries = [[entries, entries]];
         }
 
         addEntries.forEach(([key, value]) => this.set(key, value));
