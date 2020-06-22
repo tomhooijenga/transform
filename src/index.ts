@@ -188,6 +188,3 @@ export default class Pipe implements Iterable<[any, Hook]> {
         return this.hooks.size;
     }
 }
-
-const p = new Pipe();
-p.transform(new HookArgs())
