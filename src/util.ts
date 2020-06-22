@@ -1,3 +1,6 @@
+import {Entries, Hook} from "./types";
+import {HookArgs} from "./index";
+
 /**
  * Check if given value is a then-able.
  *
@@ -14,4 +17,9 @@ export function isPromise(obj: any): obj is Promise<any> {
  */
 export function isEntries(obj: any): obj is Entries {
     return typeof obj === 'object' && typeof obj.entries === 'function';
+}
+
+export function callHook(hook: Hook, args: HookArgs | any): any {
+    const hookArgs = args instanceof HookArgs ? args.args : [args];
+    return hook(...hookArgs);
 }
