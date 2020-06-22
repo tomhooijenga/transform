@@ -97,7 +97,7 @@ class Pipe {
     /**
      * Transform the pipe with the given args.
      *
-     * @param args - Single param to be used directly or a HookArgs to spread.
+     * @param args - Initial arguments to call the first function with.
      */
     transform(...args) {
         const result = this.order.reduce((value, action) => {

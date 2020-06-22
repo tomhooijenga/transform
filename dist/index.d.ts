@@ -4,7 +4,21 @@ export { HookArgs, Pipe, };
 export default class Pipe implements Iterable<[any, Hook]> {
     protected order: any[];
     protected readonly hooks: Map<any, Hook>;
-    constructor(entries?: Entries | object | Hook);
+    /**
+     * Construct from an object that has an `entries` method.
+     * @param iterable
+     */
+    constructor(iterable: Entries);
+    /**
+     * Construct from a single function which is both the key and the hook.
+     * @param entry
+     */
+    constructor(entry: Hook);
+    /**
+     * Construct from an object of keys and values.
+     * @param entries
+     */
+    constructor(entries: object);
     /**
      * Get a hook.
      */
@@ -53,7 +67,7 @@ export default class Pipe implements Iterable<[any, Hook]> {
     /**
      * Transform the pipe with the given args.
      *
-     * @param args - Single param to be used directly or a HookArgs to spread.
+     * @param args - Initial arguments to call the first function with.
      */
     transform(...args: any[]): Promise<any> | any;
     /**
