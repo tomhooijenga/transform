@@ -1,5 +1,5 @@
-import { Entries, Hook } from "./types";
-import { HookArgs } from "./index";
+import { Entries } from "./types";
+import { HookArgs } from "./hook-args";
 /**
  * Check if given value is a then-able.
  *
@@ -12,4 +12,11 @@ export declare function isPromise(obj: any): obj is Promise<any>;
  * @param obj The object to test.
  */
 export declare function isEntries(obj: any): obj is Entries;
-export declare function callHook(hook: Hook, args: HookArgs | any): any;
+/**
+ * Get the spreadable args from a HookArgs.
+ *
+ * @param value
+ * @param wrap
+ * @internal
+ */
+export declare function getValue(value: HookArgs | any, wrap: boolean): Promise<any> | any;

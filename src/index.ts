@@ -1,6 +1,6 @@
 import {HookArgs} from "./hook-args";
 import {Entries, ForEachCallback, Hook} from './types';
-import {isPromise, isEntries, callHook} from './util';
+import {getValue, isEntries, isPromise} from './util';
 
 export {
     HookArgs,
@@ -124,25 +124,16 @@ export default class Pipe implements Iterable<[any, Hook]> {
             const hook = this.get(action) as Hook;
 
             if (isPromise(value)) {
-                return Promise
-                    .resolve(value)
-                    .then((resolvedValue) => {
-                        return callHook(hook, resolvedValue);
+                return getValue(value, true)
+                    .then((resolvedValue: any[]) => {
+                        return hook(...resolvedValue)
                     });
             }
 
-            return callHook(hook, value);
+            return hook(...getValue(value, true));
         }, new HookArgs(...args));
 
-        if (isPromise(result)) {
-            return Promise
-                .resolve(result)
-                .then((resolvedResult) => {
-                    return resolvedResult instanceof HookArgs ? resolvedResult.args : resolvedResult;
-                });
-        }
-
-        return result instanceof HookArgs ? result.args : result;
+        return getValue(result, false);
     }
 
     /**

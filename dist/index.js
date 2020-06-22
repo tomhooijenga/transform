@@ -103,22 +103,14 @@ class Pipe {
         const result = this.order.reduce((value, action) => {
             const hook = this.get(action);
             if (util_1.isPromise(value)) {
-                return Promise
-                    .resolve(value)
+                return util_1.getValue(value, true)
                     .then((resolvedValue) => {
-                    return util_1.callHook(hook, resolvedValue);
+                    return hook(...resolvedValue);
                 });
             }
-            return util_1.callHook(hook, value);
+            return hook(...util_1.getValue(value, true));
         }, new hook_args_1.HookArgs(...args));
-        if (util_1.isPromise(result)) {
-            return Promise
-                .resolve(result)
-                .then((resolvedResult) => {
-                return resolvedResult instanceof hook_args_1.HookArgs ? resolvedResult.args : resolvedResult;
-            });
-        }
-        return result instanceof hook_args_1.HookArgs ? result.args : result;
+        return util_1.getValue(result, false);
     }
     /**
      * Execute the given callback once for each entry.

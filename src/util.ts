@@ -1,5 +1,5 @@
-import {Entries, Hook} from "./types";
-import {HookArgs} from "./index";
+import {Entries} from "./types";
+import {HookArgs} from "./hook-args";
 
 /**
  * Check if given value is a then-able.
@@ -16,10 +16,34 @@ export function isPromise(obj: any): obj is Promise<any> {
  * @param obj The object to test.
  */
 export function isEntries(obj: any): obj is Entries {
-    return typeof obj === 'object' && typeof obj.entries === 'function';
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.entries === 'function';
 }
 
-export function callHook(hook: Hook, args: HookArgs | any): any {
-    const hookArgs = args instanceof HookArgs ? args.args : [args];
-    return hook(...hookArgs);
+/**
+ * Get the spreadable args from a HookArgs.
+ *
+ * @param value
+ * @param wrap
+ * @internal
+ */
+export function getValue(value: HookArgs | any, wrap: boolean): Promise<any> | any {
+    if (isPromise(value)) {
+        return Promise
+            .resolve(value)
+            .then((resolvedValue) => {
+                if (resolvedValue instanceof HookArgs) {
+                    return resolvedValue.args;
+                } else if (wrap) {
+                    return [resolvedValue];
+                }
+                return resolvedValue;
+            });
+    }
+
+    if (value instanceof HookArgs) {
+        return value.args;
+    } else if (wrap) {
+        return [value];
+    }
+    return value;
 }

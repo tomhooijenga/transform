@@ -11,7 +11,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "babel src --out-dir dist --watch --source-maps inline",
+    "dev": "tsc --watch",
     "lint": "tslint --project tsconfig.json",
     "test": "mocha",
     "prepublishOnly": "npm run-script test && npm run-script build"

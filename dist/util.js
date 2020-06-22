@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.callHook = exports.isEntries = exports.isPromise = void 0;
-const index_1 = require("./index");
+exports.getValue = exports.isEntries = exports.isPromise = void 0;
+const hook_args_1 = require("./hook-args");
 /**
  * Check if given value is a then-able.
  *
@@ -17,11 +17,36 @@ exports.isPromise = isPromise;
  * @param obj The object to test.
  */
 function isEntries(obj) {
-    return typeof obj === 'object' && typeof obj.entries === 'function';
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.entries === 'function';
 }
 exports.isEntries = isEntries;
-function callHook(hook, args) {
-    const hookArgs = args instanceof index_1.HookArgs ? args.args : [args];
-    return hook(...hookArgs);
+/**
+ * Get the spreadable args from a HookArgs.
+ *
+ * @param value
+ * @param wrap
+ * @internal
+ */
+function getValue(value, wrap) {
+    if (isPromise(value)) {
+        return Promise
+            .resolve(value)
+            .then((resolvedValue) => {
+            if (resolvedValue instanceof hook_args_1.HookArgs) {
+                return resolvedValue.args;
+            }
+            else if (wrap) {
+                return [resolvedValue];
+            }
+            return resolvedValue;
+        });
+    }
+    if (value instanceof hook_args_1.HookArgs) {
+        return value.args;
+    }
+    else if (wrap) {
+        return [value];
+    }
+    return value;
 }
-exports.callHook = callHook;
+exports.getValue = getValue;
