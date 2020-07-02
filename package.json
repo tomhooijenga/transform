@@ -14,22 +14,12 @@
     "dev": "tsc --watch",
     "lint": "tslint --project tsconfig.json",
     "test": "mocha",
-    "prepublishOnly": "npm run-script test && npm run-script build"
+    "prepublishOnly": "npm run lint && npm run build && npm run test"
   },
   "author": "Tom Hooijenga <tomhooijenga@gmail.com>",
   "homepage": "https://github.com/tomhooijenga/transform",
   "license": "MIT",
   "devDependencies": {
-    "@babel/cli": "^7.10.1",
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
-    "@babel/plugin-transform-runtime": "^7.10.1",
-    "@babel/preset-env": "^7.10.2",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.2.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.21.2",
     "mocha": "^8.0.1",
     "should": "^13.2.3",
     "should-sinon": "0.0.6",
