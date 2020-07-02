@@ -25,13 +25,60 @@ new Pipe({
     second: () => {}
 });
 
-new Pipe(function () {
+new Pipe(function main () {
 });
 
 new Pipe(new Map(...));
+
+// Clone a pipe
+new Pipe(otherPipe);
 ```
 
 # Methods
+
+##  insert, before, after
+```typescript
+const key = {};
+const func = () => {};
+
+// A function can be registered with any key.
+pipe.insert('neighbour', key, func);
+
+// You can also use the hook as the key. The following have the same result.
+pipe.insert('neighbour', func, func);
+pipe.insert('neighbour', func);
+```
+## transform
+```typescript
+const pipe = new Pipe([
+    (a, b) => a + b,
+    (sum) => sum * 2, 
+    (product) => product / 2, 
+]);
+// Each function is called with the result of the last function.
+pipe.transform(2, 4); // 16
+
+// If you want to return multiple args for the next hook, return a HookArgs.
+const pipe = new Pipe([
+    (obj) => {
+        const keys = Object.keys(obj);
+        const values = Object.values(obj);
+        return new HookArgs(keys, values);
+    },
+    (keys, values) => {
+        return new HookArgs(
+            keys.includes('hello'),
+            values.includes('world')
+        )
+    }, 
+]);
+
+pipe.transform({
+    hello: 'planet',
+}); // [true, false]
+```
+
+## All methods
 ```typescript
 export default class Pipe implements Iterable<[any, Hook]> {
     protected order: any[];
