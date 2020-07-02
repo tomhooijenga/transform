@@ -13,22 +13,14 @@ export default class Pipe implements Iterable<[any, Hook]> {
 
     protected readonly hooks: Map<any, Hook> = new Map();
 
+
     /**
-     * Construct from an object that has an `entries` method.
-     * @param iterable
-     */
-    constructor(iterable: Entries);
-    /**
-     * Construct from a single function which is both the key and the hook.
-     * @param entry
-     */
-    constructor(entry: Hook);
-    /**
-     * Construct from an object of keys and values.
+     * Construct a new Pipe.
+     * If entries is an Entries, each entry is added.
+     * If entries is an object, each key value pair is added.
+     * If entries is a function, it is added with itself as key.
      * @param entries
      */
-    constructor(entries: object);
-
     constructor(entries: Entries | object | Hook = {}) {
         let addEntries: [any, Hook][] = [];
 
