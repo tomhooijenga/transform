@@ -1,9 +1,9 @@
-import {HookArgs} from "./hook-args";
+import {Arguments} from "./arguments";
 import {Entries, ForEachCallback, Hook} from './types';
 import {getValue, isEntries, isPromise} from './util';
 
 export {
-    HookArgs,
+    Arguments,
     Pipe,
 }
 
@@ -139,7 +139,7 @@ export default class Pipe implements Iterable<[any, Hook]> {
             }
 
             return hook(...getValue(value, true));
-        }, new HookArgs(...args));
+        }, new Arguments(...args));
 
         return getValue(result, false);
     }

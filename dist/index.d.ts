@@ -1,6 +1,6 @@
-import { HookArgs } from "./hook-args";
+import { Arguments } from "./arguments";
 import { Entries, ForEachCallback, Hook } from './types';
-export { HookArgs, Pipe, };
+export { Arguments, Pipe, };
 export default class Pipe implements Iterable<[any, Hook]> {
     protected order: any[];
     protected readonly hooks: Map<any, Hook>;

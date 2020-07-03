@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getValue = exports.isEntries = exports.isPromise = void 0;
-const hook_args_1 = require("./hook-args");
+const arguments_1 = require("./arguments");
 /**
  * Check if given value is a then-able.
  *
@@ -21,7 +21,7 @@ function isEntries(obj) {
 }
 exports.isEntries = isEntries;
 /**
- * Get the spreadable args from a HookArgs.
+ * Get the spreadable args from a Arguments.
  *
  * @param value
  * @param wrap
@@ -32,7 +32,7 @@ function getValue(value, wrap) {
         return Promise
             .resolve(value)
             .then((resolvedValue) => {
-            if (resolvedValue instanceof hook_args_1.HookArgs) {
+            if (resolvedValue instanceof arguments_1.Arguments) {
                 return resolvedValue.args;
             }
             else if (wrap) {
@@ -41,7 +41,7 @@ function getValue(value, wrap) {
             return resolvedValue;
         });
     }
-    if (value instanceof hook_args_1.HookArgs) {
+    if (value instanceof arguments_1.Arguments) {
         return value.args;
     }
     else if (wrap) {

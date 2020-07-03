@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HookArgs = void 0;
-class HookArgs {
+exports.Arguments = void 0;
+class Arguments {
     constructor(...args) {
         this.args = args;
     }
 }
-exports.HookArgs = HookArgs;
+exports.Arguments = Arguments;

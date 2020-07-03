@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Pipe = exports.HookArgs = void 0;
-const hook_args_1 = require("./hook-args");
-Object.defineProperty(exports, "HookArgs", { enumerable: true, get: function () { return hook_args_1.HookArgs; } });
+exports.Pipe = exports.Arguments = void 0;
+const arguments_1 = require("./arguments");
+Object.defineProperty(exports, "Arguments", { enumerable: true, get: function () { return arguments_1.Arguments; } });
 const util_1 = require("./util");
 class Pipe {
     /**
@@ -116,7 +116,7 @@ class Pipe {
                 });
             }
             return hook(...util_1.getValue(value, true));
-        }, new hook_args_1.HookArgs(...args));
+        }, new arguments_1.Arguments(...args));
         return util_1.getValue(result, false);
     }
     /**

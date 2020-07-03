@@ -58,15 +58,15 @@ const pipe = new Pipe([
 // Each function is called with the result of the last function.
 pipe.transform(2, 4); // 16
 
-// If you want to return multiple args for the next hook, return a HookArgs.
+// If you want to return multiple args for the next hook, return a Arguments.
 const pipe = new Pipe([
     (obj) => {
         const keys = Object.keys(obj);
         const values = Object.values(obj);
-        return new HookArgs(keys, values);
+        return new Arguments(keys, values);
     },
     (keys, values) => {
-        return new HookArgs(
+        return new Arguments(
             keys.includes('hello'),
             values.includes('world')
         )

@@ -1,6 +1,6 @@
 const should = require('should');
 const {isPromise, isEntries, getValue} = require('../dist/util');
-const {HookArgs} = require('../dist/hook-args');
+const {Arguments} = require('../dist/arguments');
 
 describe('isPromise', () => {
   const fn = () => {};
@@ -49,9 +49,9 @@ describe('getValue', () => {
       [{}, [{}]],
       [['a', 'b'], [['a', 'b']]],
 
-      [new HookArgs(1), [1]],
-      [new HookArgs(1, 2, 3), [1, 2, 3]],
-      [new HookArgs([1], 2), [[1], 2]],
+      [new Arguments(1), [1]],
+      [new Arguments(1, 2, 3), [1, 2, 3]],
+      [new Arguments([1], 2), [[1], 2]],
     ]);
 
     for (const [obj, result] of results) {
@@ -67,9 +67,9 @@ describe('getValue', () => {
       [{}, {}],
       [['a', 'b'], ['a', 'b']],
 
-      [new HookArgs(1), [1]],
-      [new HookArgs(1, 2, 3), [1, 2, 3]],
-      [new HookArgs([1], 2), [[1], 2]],
+      [new Arguments(1), [1]],
+      [new Arguments(1, 2, 3), [1, 2, 3]],
+      [new Arguments([1], 2), [[1], 2]],
     ]);
 
     for (const [obj, result] of results) {

@@ -1,7 +1,7 @@
 const should = require('should');
 const sinon = require('sinon');
 require('should-sinon');
-const {Pipe, HookArgs} = require('../dist');
+const {Pipe, Arguments} = require('../dist');
 
 it('constructor', () => {
   const p = new Pipe();
@@ -160,9 +160,9 @@ it('transform async custom promise', () => {
     .and.should.have.property('then');
 });
 
-it('transform HookArgs', () => {
+it('transform Arguments', () => {
   const inc = sinon.spy((val, second, third) => {
-    return new HookArgs(val + 1, second, third);
+    return new Arguments(val + 1, second, third);
   });
   const p = new Pipe({
     a: inc,
@@ -177,9 +177,9 @@ it('transform HookArgs', () => {
   inc.callCount.should.equal(3);
 })
 
-it('transform async HookArgs', async () => {
+it('transform async Arguments', async () => {
   const incAsync = sinon.spy((val, second, third) => {
-    return Promise.resolve(new HookArgs(val + 1, second, third))
+    return Promise.resolve(new Arguments(val + 1, second, third))
   });
 
   const p = new Pipe({

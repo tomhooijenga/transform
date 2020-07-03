@@ -1,5 +1,5 @@
 import {Entries} from "./types";
-import {HookArgs} from "./hook-args";
+import {Arguments} from "./arguments";
 
 /**
  * Check if given value is a then-able.
@@ -20,18 +20,18 @@ export function isEntries(obj: any): obj is Entries {
 }
 
 /**
- * Get the spreadable args from a HookArgs.
+ * Get the spreadable args from a Arguments.
  *
  * @param value
  * @param wrap
  * @internal
  */
-export function getValue(value: HookArgs | any, wrap: boolean): Promise<any> | any {
+export function getValue(value: Arguments | any, wrap: boolean): Promise<any> | any {
     if (isPromise(value)) {
         return Promise
             .resolve(value)
             .then((resolvedValue) => {
-                if (resolvedValue instanceof HookArgs) {
+                if (resolvedValue instanceof Arguments) {
                     return resolvedValue.args;
                 } else if (wrap) {
                     return [resolvedValue];
@@ -40,7 +40,7 @@ export function getValue(value: HookArgs | any, wrap: boolean): Promise<any> | a
             });
     }
 
-    if (value instanceof HookArgs) {
+    if (value instanceof Arguments) {
         return value.args;
     } else if (wrap) {
         return [value];
