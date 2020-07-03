@@ -3,8 +3,8 @@
 npm i @teamawesome/transform
 ```
 # Usage
-```
-import Pipe from '@teamawesome/transform
+```typescript
+import Pipe from '@teamawesome/transform'
 
 const p = new Pipe({
     first: () => {},
@@ -19,7 +19,7 @@ const value = p.transform();
 ```
 # Constructor
 Can be given an iterable with entries, an object, or just a function.
-```
+```typescript
 new Pipe({
     first: () => {},
     second: () => {}
@@ -50,6 +50,8 @@ pipe.insert('neighbour', func);
 ```
 ## transform
 ```typescript
+import {Pipe, Arguments} from '@teamwesome/transform';
+
 const pipe = new Pipe([
     (a, b) => a + b,
     (sum) => sum * 2, 
