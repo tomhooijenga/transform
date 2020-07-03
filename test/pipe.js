@@ -22,7 +22,7 @@ describe('pipe fn', () => {
     const p = pipe((a) => a);
 
     p(1).should.eql(1);
-  })
+  });
 
   it('call, apply, bind', () => {
     const p = pipe((...args) => args);

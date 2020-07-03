@@ -11,13 +11,16 @@ const p = new Pipe({
 });
 // Insert a function after another
 p.after('first', 'afterFirst', () => {});
+
 // Insert a function before another
 p.before('first', 'beforeFirst', () => {});
 
 // will run 'beforeFirst', 'first', 'afterFirst'.
 const value = p.transform();
 ```
-# Constructor
+
+# Class
+## Constructor
 Can be given an iterable with entries, an object, or just a function.
 ```typescript
 new Pipe({
@@ -33,9 +36,6 @@ new Pipe(new Map(...));
 // Clone a pipe
 new Pipe(otherPipe);
 ```
-
-# Methods
-
 ##  insert, before, after
 ```typescript
 const key = {};
@@ -80,7 +80,35 @@ pipe.transform({
 }); // [true, false]
 ```
 
-## All methods
+# Callback
+A handy utility is `pipe` to easily generate callbacks. The following are roughly equivalant.
+```typescript
+import {pipe} from '@teamwesome/transform';
+
+// Signature is the same as Pipe constructor.
+const callback = pipe();
+```
+```typescript
+const p = new Pipe();
+const callback = p.transform.bind(pipe)
+```
+However, the callbacks from pipe are pipes themselves.
+```typescript
+import {pipe} from '@teamwesome/transform';
+
+const callback = pipe({
+    main: () => {}
+});
+// Works
+callback.insert('main', () => {});
+callback.transform('sure', 'why not');
+
+callback instanceof Pipe; // true
+callback instanceof Function; // true
+typeof callback === 'function' // true
+```
+
+# All methods
 ```typescript
 export default class Pipe implements Iterable<[any, Hook]> {
     protected order: any[];
