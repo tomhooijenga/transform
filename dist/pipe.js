@@ -15,7 +15,7 @@ class Pipe {
         this.order = [];
         this.hooks = new Map();
         let addEntries = [];
-        if (util_1.isEntries(entries)) {
+        if ((0, util_1.isEntries)(entries)) {
             addEntries = [...entries.entries()];
         }
         else if (typeof entries === 'object') {
@@ -108,15 +108,15 @@ class Pipe {
     transform(...args) {
         const result = this.order.reduce((value, action) => {
             const hook = this.get(action);
-            if (util_1.isPromise(value)) {
-                return util_1.getValue(value, true)
+            if ((0, util_1.isPromise)(value)) {
+                return (0, util_1.getValue)(value, true)
                     .then((resolvedValue) => {
                     return hook(...resolvedValue);
                 });
             }
-            return hook(...util_1.getValue(value, true));
+            return hook(...(0, util_1.getValue)(value, true));
         }, new arguments_1.Arguments(...args));
-        return util_1.getValue(result, false);
+        return (0, util_1.getValue)(result, false);
     }
     /**
      * Execute the given callback once for each entry.
